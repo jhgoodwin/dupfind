@@ -4,9 +4,9 @@ Duplicate code finder.
 
 ## Code Map
 
-- `cmd/dupfind/main.go`: executable entrypoint and duplicate detection logic.
-- `cmd/dupfind/main_test.go`: unit tests.
-- `cmd/dupfind/testdata`: test fixtures.
+- `internal/dupfind/main.go`: executable entrypoint and duplicate detection logic.
+- `internal/dupfind/main_test.go`: unit tests.
+- `internal/dupfind/testdata`: test fixtures.
 
 ## Style
 

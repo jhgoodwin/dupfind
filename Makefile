@@ -20,7 +20,7 @@ setup: install-dev-tools install-hooks go-cache
 
 build: go-cache
 	@echo "build: $(BIN_NAME)"
-	@go build -o $(BIN_DIR)/$(BIN_NAME) ./cmd/dupfind
+	@go build -o $(BIN_DIR)/$(BIN_NAME) ./internal/dupfind
 
 install: build
 	@echo "install: $(BIN_NAME) -> $(INSTALL_DIR)"
