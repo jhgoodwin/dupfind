@@ -1,0 +1,36 @@
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Go
+.gocache/
+bin/
+*.exe
+*.test
+*.out
+coverage.out
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/settings.json
+*.swp
+*.swo
+
+# Logs / temp
+*.log
+tmp/
+temp/
+
+# compiled binaries
+/dupfind
+
+# GNU Global tags
+GPATH
+GRTAGS
+GTAGS
+
+# grey-review approval markers (see .devin/workflows/phase-commit.sh)
+.grey-review/
