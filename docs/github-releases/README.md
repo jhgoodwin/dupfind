@@ -39,12 +39,13 @@ The build counter is the number of existing unstable tags matching that base and
 
 Promotion asks for a **bump type** — patch, minor, or major — and the workflow computes the new version from the unstable tag's base. The same commit as the unstable tag gets a clean semver tag.
 
-| Bump | From (base) | To |
-|---|---|---|
-| `patch` | `v0.1.0-unstable.*` | `v0.1.1` |
-| `minor` | `v0.1.0-unstable.*` | `v0.2.0` |
-| `major` | `v0.1.0-unstable.*` | `v1.0.0` |
-| `major` | `v1.3.2-unstable.*` | `v2.0.0` |
+| Bump | From (base) | To | When |
+|---|---|---|---|
+| `release` | `v0.1.0-unstable.*` | `v0.1.0` | First release — promotes at the base version |
+| `patch` | `v0.1.0-unstable.*` | `v0.1.1` | Bugfix, no API changes |
+| `minor` | `v0.1.0-unstable.*` | `v0.2.0` | New feature, backwards compatible |
+| `major` | `v0.1.0-unstable.*` | `v1.0.0` | Breaking change |
+| `major` | `v1.3.2-unstable.*` | `v2.0.0` | Subsequent major bumps |
 
 ---
 
