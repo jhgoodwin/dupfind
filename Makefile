@@ -44,7 +44,7 @@ install-hooks:
 	@echo "install: git hooks"
 	@git config core.hooksPath .githooks
 
-pre-commit: tidy-fmt-check vet cyclo coverage gtags
+pre-commit: tidy-fmt-check vet cyclo coverage gtags dup-check
 	@echo "pre-commit: ok"
 
 go-cache:
@@ -123,6 +123,6 @@ gtags:
 	fi
 	@gtags --gtagslabel=new-ctags
 
-# dup-check is disabled until the dupfind binary is built and installed.
-dup-check:
-	@echo "dup-check: disabled"
+dup-check: build
+	@echo "dup-check:"
+	@$(BIN_DIR)/$(BIN_NAME) -root internal/
