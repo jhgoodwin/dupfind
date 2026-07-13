@@ -96,7 +96,7 @@ cp bin/dupfind ~/.local/bin/
 > `module github.com/jhgoodwin/dupfind` first, then:
 
 ```bash
-go install github.com/jhgoodwin/dupfind/internal/dupfind@latest
+go install github.com/jhgoodwin/dupfind@latest
 ```
 
 ---

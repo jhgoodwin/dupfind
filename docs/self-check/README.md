@@ -78,7 +78,7 @@ duplicate code. The existing `collectGoFiles` already skips `.git`, `vendor`,
 `.gocache`, and `node_modules`. Add `testdata` to the skip list, or pass a
 `-skip-dirs` flag.
 
-Alternatively, run the check from `..` — scanning internal/dupfind/ only and
+Alternatively, run the check from `..` — scanning the root only and
 not testdata. This is simpler and avoids adding a skip mechanism.
 
 ## Risk

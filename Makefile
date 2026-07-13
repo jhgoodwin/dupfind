@@ -20,7 +20,7 @@ setup: install-dev-tools install-hooks go-cache
 
 build: go-cache
 	@echo "build: $(BIN_NAME)"
-	@go build -o $(BIN_DIR)/$(BIN_NAME) ./internal/dupfind
+	@go build -o $(BIN_DIR)/$(BIN_NAME) .
 
 install: build
 	@echo "install: $(BIN_NAME) -> $(INSTALL_DIR)"
@@ -125,4 +125,4 @@ gtags:
 
 dup-check: build
 	@echo "dup-check: scanning dupfind source tree"
-	@$(BIN_DIR)/$(BIN_NAME) -root internal/dupfind -min-nodes 30 -skip-dirs testdata
+	@$(BIN_DIR)/$(BIN_NAME) -root . -min-nodes 30 -skip-dirs testdata

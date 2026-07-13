@@ -6,7 +6,7 @@
 
 ### Architecture
 
-The entire program is one file (`internal/dupfind/main.go`, ~440 lines). It has no third-party dependencies and uses only the standard library (`go/ast`, `go/parser`, `go/token`, `flag`). This is consistent with the project's stated preference for zero dependencies without user approval.
+The entire program is one file (`main.go`, ~440 lines). It has no third-party dependencies and uses only the standard library (`go/ast`, `go/parser`, `go/token`, `flag`). This is consistent with the project's stated preference for zero dependencies without user approval.
 
 The pipeline is linear:
 
