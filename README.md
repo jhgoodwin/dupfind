@@ -7,6 +7,8 @@ Scan your Go codebase for copy-pasted code — exact copies and near-misses — 
 [![Go Version](https://img.shields.io/badge/go-1.22.2-00ADD8?logo=go)](https://go.dev/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](#license)
 [![Repo](https://img.shields.io/badge/github-jhgoodwin/dupfind-181717?logo=github)](https://github.com/jhgoodwin/dupfind)
+[![CI](https://github.com/jhgoodwin/dupfind/actions/workflows/release-unstable.yml/badge.svg)](https://github.com/jhgoodwin/dupfind/actions/workflows/release-unstable.yml)
+[![coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/jhgoodwin/dupfind/master-badges/coverage.json&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utd2lkdGg9IjEuOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj4KICA8cGF0aCBkPSJNNCAzIEM0IDEuNSA1IDEgNiAxIEwxOCAxIEMxOSAxIDIwIDEuNSAyMCAzIEwyMCAxNC41IEMyMCAxOCAxNCAyMiAxMiAyMyBDMTAgMjIgNCAxOCA0IDE0LjUgWiIvPgogIDxwYXRoIGQ9Ik03IDggUTE0IDUgMTcgOSIvPgogIDxwYXRoIGQ9Ik0xMiA5IEwxMiAxNyIvPgo8L3N2Zz4K&logoColor=white)](https://github.com/jhgoodwin/dupfind/actions/workflows/release-unstable.yml)
 
 ---
 

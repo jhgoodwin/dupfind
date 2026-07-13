@@ -20,37 +20,22 @@ jobs:
           go-version-file: go.mod
           cache: true
 
+      - name: Tests
+        run: make test-slow
+
       - name: Build
         run: make build
 
       - name: Smoke test
-        run: |
-          output=$(bin/dupfind -tests . 2>&1 || true)
-          echo "$output"
-          echo "$output" | grep -q 'Exact Duplicates' || { echo "Missing 'Exact Duplicates' in output" >&2; exit 1; }
-          echo "$output" | grep -q 'Near Duplicates' || { echo "Missing 'Near Duplicates' in output" >&2; exit 1; }
+        run: scripts/smoke-test.sh
+
+      - name: Coverage badge
+        id: badge
+        run: scripts/coverage-badge.sh /tmp/coverage.json >> "$GITHUB_OUTPUT"
 
       - name: Determine unstable version
         id: version
-        run: |
-          # Latest stable tag (v0.*.*) determines the base minor/patch.
-          stable=$(git tag --sort=v:refname | grep -E '^v0\.[0-9]+\.[0-9]+$' | tail -1)
-
-          if [ -z "$stable" ]; then
-            base="v0.1.0"
-          else
-            base="$stable"
-          fi
-
-          # Today's date
-          today=$(date -u +%Y%m%d)
-
-          # Count existing unstable tags for this base and day
-          count=$(git tag | grep -cE "^${base/-/\\-}-unstable\\.${today}\\." || true)
-          build=$((count + 1))
-
-          version="${base}-unstable.${today}.${build}"
-          echo "version=$version" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(scripts/unstable-version.sh)" >> "$GITHUB_OUTPUT"
 
       - name: Tag unstable build
         run: |
@@ -73,3 +58,6 @@ jobs:
 
             Unstable build from `master`.
           make_latest: false
+
+      - name: Push coverage badge to master-badges
+        run: scripts/push-badges.sh /tmp/coverage.json

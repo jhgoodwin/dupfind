@@ -1,0 +1,9 @@
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"                      
+ stroke-linejoin="round">                                                                                                                                  
+     <!-- Shield - Ducati-inspired shape -->                                                                                                               
+     <path d="M4 3 C4 1.5 5 1 6 1 L18 1 C19 1 20 1.5 20 3 L20 14.5 C20 18 14 22 12 23 C10 22 4 18 4 14.5 Z"/>                                              
+     <!-- Stylized T swish - crossbar curves like a swoosh -->                                                                                             
+     <path d="M7 8 Q14 5 17 9"/>                                                                                                                           
+     <!-- Stylized T swish - vertical stem -->                                                                                                             
+     <path d="M12 9 L12 17"/>                                                                                                                              
+   </svg>  
