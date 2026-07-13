@@ -10,7 +10,7 @@ set -eu
 
 json_out="${1:?usage: coverage-badge.sh <json-output-path>}"
 
-go test -tags=slow -coverprofile=/tmp/coverage.out ./...
+go test -tags=slow -coverprofile=/tmp/coverage.out ./... >&2
 pct=$(go tool cover -func=/tmp/coverage.out | grep '^total:' | awk '{print $3}' | tr -d '%')
 
 color="red"
