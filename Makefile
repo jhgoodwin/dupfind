@@ -124,5 +124,5 @@ gtags:
 	@gtags --gtagslabel=new-ctags
 
 dup-check: build
-	@echo "dup-check:"
-	@$(BIN_DIR)/$(BIN_NAME) -root internal/
+	@echo "dup-check: scanning dupfind source tree"
+	@$(BIN_DIR)/$(BIN_NAME) -root internal/dupfind -min-nodes 30 -skip-dirs testdata

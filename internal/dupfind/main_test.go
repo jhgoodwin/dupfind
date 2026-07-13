@@ -58,7 +58,7 @@ func TestExtractBlocksMinNodes(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			files, err := collectGoFiles(".", false)
+			files, err := collectGoFiles(".", false, nil)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -84,7 +84,7 @@ func TestExtractBlocksMinNodes(t *testing.T) {
 // ---------------------------------------------------------------------------
 
 func TestExactDuplicates(t *testing.T) {
-	files, err := collectGoFiles("testdata/exact", false)
+	files, err := collectGoFiles("testdata/exact", false, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -107,7 +107,7 @@ func TestExactDuplicates(t *testing.T) {
 }
 
 func TestNoExactDuplicateInFalsePos(t *testing.T) {
-	files, err := collectGoFiles("testdata/falsepos", false)
+	files, err := collectGoFiles("testdata/falsepos", false, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -124,7 +124,7 @@ func TestNoExactDuplicateInFalsePos(t *testing.T) {
 // ---------------------------------------------------------------------------
 
 func TestNearDuplicates(t *testing.T) {
-	files, err := collectGoFiles("testdata/near", false)
+	files, err := collectGoFiles("testdata/near", false, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -140,7 +140,7 @@ func TestNearDuplicates(t *testing.T) {
 }
 
 func TestNoNearDuplicateInFalsePos(t *testing.T) {
-	files, err := collectGoFiles("testdata/falsepos", false)
+	files, err := collectGoFiles("testdata/falsepos", false, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -252,7 +252,7 @@ func useInt() int { return 42 }
 // ---------------------------------------------------------------------------
 
 func TestIDFWeightsBoilerplateLow(t *testing.T) {
-	files, err := collectGoFiles("testdata/near", false)
+	files, err := collectGoFiles("testdata/near", false, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -293,7 +293,7 @@ func TestIDFWeightsBoilerplateLow(t *testing.T) {
 }
 
 func TestWeightedJaccardSuppressesBoilerplate(t *testing.T) {
-	files, err := collectGoFiles("testdata/falsepos", false)
+	files, err := collectGoFiles("testdata/falsepos", false, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -348,7 +348,7 @@ func TestShingleSetUnique(t *testing.T) {
 // ---------------------------------------------------------------------------
 
 func TestCollectGoFilesExcludesTests(t *testing.T) {
-	files, err := collectGoFiles("testdata", false)
+	files, err := collectGoFiles("testdata", false, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -360,7 +360,7 @@ func TestCollectGoFilesExcludesTests(t *testing.T) {
 }
 
 func TestCollectGoFilesIncludesTests(t *testing.T) {
-	files, err := collectGoFiles(".", true)
+	files, err := collectGoFiles(".", true, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -455,7 +455,7 @@ func TestFuncName(t *testing.T) {
 // ---------------------------------------------------------------------------
 
 func TestSiblingsNotReportedAsNearDups(t *testing.T) {
-	files, err := collectGoFiles("testdata/siblings", false)
+	files, err := collectGoFiles("testdata/siblings", false, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -471,7 +471,7 @@ func TestSiblingsNotReportedAsNearDups(t *testing.T) {
 }
 
 func TestSiblingsFunction(t *testing.T) {
-	files, err := collectGoFiles("testdata/siblings", false)
+	files, err := collectGoFiles("testdata/siblings", false, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -497,7 +497,7 @@ func TestSiblingsFunction(t *testing.T) {
 // ---------------------------------------------------------------------------
 
 func TestMinCopiesFiltersTwoCopyGroups(t *testing.T) {
-	files, err := collectGoFiles("testdata/exact", false)
+	files, err := collectGoFiles("testdata/exact", false, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -512,7 +512,7 @@ func TestMinCopiesFiltersTwoCopyGroups(t *testing.T) {
 }
 
 func TestMinCopiesDetectsThreeCopies(t *testing.T) {
-	files, err := collectGoFiles("testdata/mincopies", false)
+	files, err := collectGoFiles("testdata/mincopies", false, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -531,7 +531,7 @@ func TestMinCopiesDetectsThreeCopies(t *testing.T) {
 // ---------------------------------------------------------------------------
 
 func TestLineSpanFiltersShortBlocks(t *testing.T) {
-	files, err := collectGoFiles("testdata/exact", false)
+	files, err := collectGoFiles("testdata/exact", false, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -542,7 +542,7 @@ func TestLineSpanFiltersShortBlocks(t *testing.T) {
 }
 
 func TestLineSpanOnExtractedBlocks(t *testing.T) {
-	files, err := collectGoFiles("testdata/exact", false)
+	files, err := collectGoFiles("testdata/exact", false, nil)
 	if err != nil {
 		t.Fatal(err)
 	}

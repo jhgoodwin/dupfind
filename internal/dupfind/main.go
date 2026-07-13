@@ -49,11 +49,19 @@ func main() {
 	minLines := flag.Int("min-lines", 5, "minimum line span for a block")
 	minCopies := flag.Int("min-copies", 3, "minimum copy count for exact duplicates")
 	simThreshold := flag.Float64("sim", 0.75, "Jaccard similarity threshold for near-duplicates")
+	skipDirsFlag := flag.String("skip-dirs", "", "comma-separated directory names to skip")
 	includeTests := flag.Bool("tests", false, "include _test.go files")
 	showSig := flag.Bool("sig", false, "show tree signatures in output")
 	flag.Parse()
 
-	files, err := collectGoFiles(*root, *includeTests)
+	skipDirs := make(map[string]bool)
+	for _, d := range strings.Split(*skipDirsFlag, ",") {
+		if d != "" {
+			skipDirs[d] = true
+		}
+	}
+
+	files, err := collectGoFiles(*root, *includeTests, skipDirs)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -73,21 +81,29 @@ func main() {
 
 	nearPairs := findNearDuplicates(blocks, *simThreshold)
 	reportNearDuplicates(nearPairs, *simThreshold, *showSig)
+
+	if len(exactGroups) > 0 || len(nearPairs) > 0 {
+		os.Exit(2)
+	}
 }
 
 // ---------------------------------------------------------------------------
 // File collection
 // ---------------------------------------------------------------------------
 
-func collectGoFiles(root string, includeTests bool) ([]string, error) {
+func collectGoFiles(root string, includeTests bool, skipDirs map[string]bool) ([]string, error) {
 	var files []string
 	err := filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
 		if d.IsDir() {
-			switch d.Name() {
+			name := d.Name()
+			switch name {
 			case ".git", "vendor", ".gocache", "node_modules":
+				return filepath.SkipDir
+			}
+			if skipDirs[name] {
 				return filepath.SkipDir
 			}
 			return nil
