@@ -1,0 +1,121 @@
+name: Promote to Stable (shared)
+
+on:
+  workflow_call:
+    inputs:
+      unstable_tag:
+        description: "Unstable tag to promote (empty = auto-detect latest)"
+        required: false
+        type: string
+        default: ""
+      bump:
+        description: "Bump type"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve unstable tag
+        id: unstable
+        run: |
+          if [ -n "${{ inputs.unstable_tag }}" ]; then
+            tag="${{ inputs.unstable_tag }}"
+
+            # Validate format
+            if ! echo "$tag" | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+-unstable\.[0-9]{8}\.[0-9]+$'; then
+              echo "Invalid unstable tag format: $tag" >&2
+              exit 1
+            fi
+
+            # Verify tag exists
+            if ! git tag | grep -qF "$tag"; then
+              echo "Tag not found: $tag" >&2
+              exit 1
+            fi
+          else
+            tag=$(git tag --sort=v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+-unstable\.[0-9]{8}\.[0-9]+$' | tail -1)
+
+            if [ -z "$tag" ]; then
+              echo "No unstable tag found to promote." >&2
+              exit 1
+            fi
+          fi
+
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Determine stable version
+        id: version
+        run: |
+          unstable="${{ steps.unstable.outputs.tag }}"
+
+          base=$(echo "$unstable" | sed 's/-unstable.*//')
+          major=$(echo "$base" | cut -d. -f1 | sed 's/v//')
+          minor=$(echo "$base" | cut -d. -f2)
+          patch=$(echo "$base" | cut -d. -f3)
+
+          case "${{ inputs.bump }}" in
+            release)
+              new_major=$major
+              new_minor=$minor
+              new_patch=$patch
+              ;;
+            major)
+              new_major=$((major + 1))
+              new_minor=0
+              new_patch=0
+              ;;
+            minor)
+              new_major=$major
+              new_minor=$((minor + 1))
+              new_patch=0
+              ;;
+            patch)
+              new_major=$major
+              new_minor=$minor
+              new_patch=$((patch + 1))
+              ;;
+          esac
+
+          echo "version=v$new_major.$new_minor.$new_patch" >> "$GITHUB_OUTPUT"
+
+      - name: Tag stable version
+        run: |
+          unstable="${{ steps.unstable.outputs.tag }}"
+          commit=$(git rev-list -n 1 "$unstable")
+          git tag "${{ steps.version.outputs.version }}" "$commit"
+          git push origin "${{ steps.version.outputs.version }}"
+
+      - name: Move latest tag
+        run: |
+          git tag -f latest
+          git push origin -f latest
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          name: ${{ steps.version.outputs.version }}
+          body: |
+            ## ${{ steps.version.outputs.version }}
+
+            Promoted from ${{ steps.unstable.outputs.tag }}.
+          make_latest: false
+
+      - name: Summary
+        run: |
+          echo "## Release summary" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| | |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| **Unstable** | ${{ steps.unstable.outputs.tag }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| **Bump**     | ${{ inputs.bump }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| **Stable**   | ${{ steps.version.outputs.version }} |" >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,75 @@
+name: Release (Unstable)
+
+on:
+  push:
+    branches: [master]
+
+permissions:
+  contents: write
+
+jobs:
+  unstable:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Build
+        run: make build
+
+      - name: Smoke test
+        run: |
+          output=$(bin/dupfind -tests internal/)
+          echo "$output"
+          echo "$output" | grep -q 'Exact Duplicates' || { echo "Missing 'Exact Duplicates' in output" >&2; exit 1; }
+          echo "$output" | grep -q 'Near Duplicates' || { echo "Missing 'Near Duplicates' in output" >&2; exit 1; }
+
+      - name: Determine unstable version
+        id: version
+        run: |
+          # Latest stable tag (v0.*.*) determines the base minor/patch.
+          stable=$(git tag --sort=v:refname | grep -E '^v0\.[0-9]+\.[0-9]+$' | tail -1)
+
+          if [ -z "$stable" ]; then
+            base="v0.1.0"
+          else
+            base="$stable"
+          fi
+
+          # Today's date
+          today=$(date -u +%Y%m%d)
+
+          # Count existing unstable tags for this base and day
+          count=$(git tag | grep -cE "^${base/-/\\-}-unstable\\.${today}\\." || true)
+          build=$((count + 1))
+
+          version="${base}-unstable.${today}.${build}"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Tag unstable build
+        run: |
+          git tag "${{ steps.version.outputs.version }}"
+          git push origin "${{ steps.version.outputs.version }}"
+
+      - name: Move unstable tag
+        run: |
+          git tag -f unstable
+          git push origin -f unstable
+
+      - name: Create GitHub Pre-release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          name: ${{ steps.version.outputs.version }}
+          prerelease: true
+          body: |
+            ## ${{ steps.version.outputs.version }}
+
+            Unstable build from `master`.
+          make_latest: false

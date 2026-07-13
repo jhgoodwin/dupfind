@@ -1,0 +1,29 @@
+name: Promote to Stable (Advanced)
+
+on:
+  workflow_dispatch:
+    inputs:
+      unstable_tag:
+        description: "Unstable tag to promote"
+        required: true
+        type: string
+      bump:
+        description: "Bump type"
+        required: true
+        default: patch
+        type: choice
+        options:
+          - release
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    uses: ./.github/workflows/promote-shared.yml
+    with:
+      unstable_tag: ${{ inputs.unstable_tag }}
+      bump: ${{ inputs.bump }}

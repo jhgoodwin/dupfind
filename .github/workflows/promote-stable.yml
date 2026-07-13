@@ -1,0 +1,25 @@
+name: Promote to Stable
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Bump type"
+        required: true
+        default: patch
+        type: choice
+        options:
+          - release
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    uses: ./.github/workflows/promote-shared.yml
+    with:
+      unstable_tag: ""
+      bump: ${{ inputs.bump }}
